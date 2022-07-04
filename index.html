@@ -1,0 +1,118 @@
+<!DOCTYPE HTML []>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json" />
+  <script>
+function myError() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+<script src=
+"https://code.jquery.com/jquery-3.5.1.js">
+    </script>
+  
+  </head>
+  <body>
+  <h1><span class="h1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Glycamic Index: Foods</h1>
+
+  <p>The glycemic index (GI) is a value used to measure how much specific foods increase blood sugar levels. Foods are classified as low, medium, or high glycemic foods and ranked on a scale of 0–100. The lower the GI of a specific food, the less it may affect your blood sugar levels ( 1 )</p>
+  <p>The App shows the Glycemic Index (GI) value of the food you will search for in the box below.</p>
+    <div class="spacer">
+       <input type="text" id="myInput" onkeyup="myError()" placeholder="Type Food Name here...">
+      <table id='table'>
+            <!-- HEADING FORMATION -->
+            <tr>
+                <th>Food Type</th>
+                <th>Glycemic Index</th>
+            </tr>
+            <div class="ani"></div>
+            <script>
+                var percentColors = [
+    { pct: 0, color: '#00FF00' },   { pct: 3, color: '#12FF00' },   { pct: 6, color: '#24FF00' },
+    { pct: 10, color: '#47FF00' },  { pct: 13, color: '#58FF00' },  { pct: 16, color: '#6AFF00' },
+    { pct: 20, color: '#7CFF00' },  { pct: 23, color: '#8DFF00' },  { pct: 26, color: '#9FFF00' },
+    { pct: 30, color: '#B0FF00' },  { pct: 33, color: '#C2FF00' },  { pct: 36, color: '#D4FF00' },
+    { pct: 40, color: '#E5FF00' },  { pct: 43, color: '#F7FF00' },  { pct: 46, color: '#FFF600' },
+    { pct: 50, color: '#FFE400' },  { pct: 53, color: '#FFD300' },  { pct: 56, color: '#FFC100' },
+    { pct: 60, color: '#FFAF00' },  { pct: 63, color: '#FF9E00' },  { pct: 66, color: '#FF8C00' },
+    { pct: 70, color: '#FF7B00' },  { pct: 73, color: '#FF6900' },  { pct: 76, color: '#FF5700' },
+    { pct: 80, color: '#FF4600' },  { pct: 83, color: '#FF3400' },  { pct: 86, color: '#FF2300' },
+    { pct: 90, color: '#FF1100' },  { pct: 93, color: '#FF0000' },  { pct: 96, color: '#FF0000' },
+    { pct: 100, color: '#FF0000' }
+];
+                function getcolor(id)
+                {
+                    return percentColors[id].color;
+                }
+
+
+                $(document).ready(function () {
+  
+                    // FETCHING DATA FROM JSON FILE
+                    $.getJSON("https://raw.githubusercontent.com/Killercodes/data/master/GI/GI%20Database%20Small.json", 
+                            function (data) {
+                        var dataRow = '';
+  
+                        // ITERATING THROUGH OBJECTS
+                        $.each(data, function (key, value) {
+  
+                            //CONSTRUCTION OF ROWS HAVING
+                            // DATA FROM JSON OBJECT
+                            var siz = parseInt(value.GI);
+                            var clr = 255 - siz;
+                            const d155 = 155;
+                            if(siz >= 50)
+                            {    
+                                
+                                var clr = `background-color:rgb(${siz+155},${155-siz},0);`;
+                                dataRow += `<tr style="${clr}">`;
+                            }
+                            /*else if(siz >= 50 && siz <75)
+                            {    
+                                var clr = `background-color:rgb(${siz},${255-siz},${siz});`;
+                                dataRow += `<tr style="${clr}">`;
+                            }*/
+                            else if(siz <= 50)
+                            {
+                                
+                                //var cls = `color:${getcolor(siz)}`;
+                                
+                                var clr = `background-color:rgb(${155-siz},${200+siz},0);`;
+                                dataRow +=  `<tr style="${clr}">`;
+                            }
+
+                            dataRow += '<td>'  + " " +  value.name +  '</td>';
+                            dataRow += '<td id="val">' + value.GI + '</td>';
+                            dataRow += '</tr>';
+                        });
+                          
+                        //INSERTING ROWS INTO TABLE 
+                        $('#table').append(dataRow);
+                    });
+                });
+            </script>
+    </div>
+    <script src="pwa.js"></script>
+  </body>
+</html>
