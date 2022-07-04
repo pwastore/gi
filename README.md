@@ -1,2 +1,0 @@
-# gi
-Glycemic Index
